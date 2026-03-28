@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Past Simple Adventure 🚀</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #7C3AED;
+    --pink: #EC4899;
+    --yellow: #FBBF24;
+    --green: #10B981;
+    --blue: #3B82F6;
+    --orange: #F97316;
+    --red: #EF4444;
+    --bg: #0F0A2E;
+    --card: #1E1550;
+    --card2: #2D1F6E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* STARS BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(2px 2px at 50% 10%, rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 80% 15%, rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 75%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 35%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.5) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .rocket { font-size: 3rem; animation: bounce 1.5s ease-in-out infinite; display: inline-block; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+  header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    background: linear-gradient(135deg, #FBBF24, #EC4899, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin: 10px 0 5px;
+  }
+
+  header p { color: #A5B4FC; font-size: 1.1rem; font-weight: 600; }
+
+  /* SCORE BAR */
+  .score-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 20px;
+    margin: 20px auto;
+    border: 2px solid var(--card2);
+    flex-wrap: wrap;
+  }
+
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .score-item span:first-child { font-size: 1.4rem; }
+
+  /* NAVIGATION TABS */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .tab-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: var(--card);
+    color: #A5B4FC;
+    border: 2px solid transparent;
+  }
+
+  .tab-btn:hover { transform: translateY(-3px); background: var(--card2); }
+  .tab-btn.active { color: white; border-color: var(--yellow); background: var(--card2); box-shadow: 0 0 20px rgba(251,191,36,0.3); }
+
+  /* SECTIONS */
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* LESSON SECTION */
+  .lesson-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 28px;
+    margin: 16px 0;
+    border-left: 5px solid;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lesson-card::before {
+    content: attr(data-emoji);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4rem;
+    opacity: 0.15;
+  }
+
+  .lesson-card.purple { border-color: var(--purple); }
+  .lesson-card.pink { border-color: var(--pink); }
+  .lesson-card.blue { border-color: var(--blue); }
+  .lesson-card.green { border-color: var(--green); }
+
+  .lesson-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .lesson-card.purple h2 { color: #C4B5FD; }
+  .lesson-card.pink h2 { color: #F9A8D4; }
+  .lesson-card.blue h2 { color: #93C5FD; }
+  .lesson-card.green h2 { color: #6EE7B7; }
+
+  .lesson-card p { line-height: 1.7; color: #CBD5E1; font-size: 1rem; }
+
+  .formula-box {
+    background: rgba(124,58,237,0.2);
+    border: 2px dashed var(--purple);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 14px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #C4B5FD;
+  }
+
+  .examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .example-chip {
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: #E2E8F0;
+  }
+
+  .example-chip strong { color: var(--yellow); }
+
+  .irregular-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 0.95rem;
+  }
+
+  .irregular-table th {
+    background: rgba(236,72,153,0.3);
+    color: #F9A8D4;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 800;
+  }
+
+  .irregular-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    color: #CBD5E1;
+  }
+
+  .irregular-table tr:hover td { background: rgba(255,255,255,0.05); }
+  .irregular-table td strong { color: var(--yellow); }
+
+  /* ===================== QUIZ ===================== */
+  .quiz-container { max-width: 680px; margin: 0 auto; }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    height: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--green), var(--blue));
+    transition: width 0.5s ease;
+  }
+
+  .question-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 32px;
+    text-align: center;
+    border: 2px solid var(--card2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .question-number {
+    font-size: 0.85rem;
+    color: #818CF8;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    color: white;
+  }
+
+  .question-text .blank {
+    display: inline-block;
+    min-width: 100px;
+    border-bottom: 3px solid var(--yellow);
+    color: var(--yellow);
+    padding: 0 8px;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .option-btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 16px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .option-btn:hover:not(:disabled) { border-color: var(--blue); background: rgba(59,130,246,0.15); transform: scale(1.02); }
+  .option-btn.correct { background: rgba(16,185,129,0.25); border-color: var(--green); color: #6EE7B7; }
+  .option-btn.wrong { background: rgba(239,68,68,0.2); border-color: var(--red); color: #FCA5A5; }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .feedback-box.show { display: block; animation: pop 0.3s ease; }
+  @keyframes pop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .feedback-box.good { background: rgba(16,185,129,0.2); color: #6EE7B7; border: 1px solid var(--green); }
+  .feedback-box.bad { background: rgba(239,68,68,0.15); color: #FCA5A5; border: 1px solid var(--red); }
+
+  .next-btn {
+    font-family: 'Fredoka One', cursive;
+    margin-top: 20px;
+    padding: 14px 36px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: white;
+    cursor: pointer;
+    display: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+
+  .next-btn:hover { transform: scale(1.05); box-shadow: 0 6px 28px rgba(124,58,237,0.6); }
+  .next-btn.show { display: inline-block; }
+
+  /* ===================== FILL IN THE BLANK ===================== */
+  .blank-container { max-width: 700px; margin: 0 auto; }
+
+  .blank-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 28px;
+    margin: 16px 0;
+    border: 2px solid var(--card2);
+    transition: border-color 0.3s;
+  }
+
+  .blank-card.correct-card { border-color: var(--green); }
+  .blank-card.wrong-card { border-color: var(--red); }
+
+  .blank-sentence {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 2;
+    color: #E2E8F0;
+  }
+
+  .blank-input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    color: white;
+    padding: 4px 12px;
+    width: 130px;
+    text-align: center;
+    transition: all 0.2s;
+    outline: none;
+  }
+
+  .blank-input:focus { border-color: var(--blue); background: rgba(59,130,246,0.15); }
+  .blank-input.correct-input { border-color: var(--green); background: rgba(16,185,129,0.2); color: #6EE7B7; }
+  .blank-input.wrong-input { border-color: var(--red); background: rgba(239,68,68,0.15); color: #FCA5A5; }
+
+  .hint-text { font-size: 0.85rem; color: #64748B; margin-top: 6px; font-style: italic; }
+  .correct-answer { font-size: 0.9rem; color: #6EE7B7; margin-top: 4px; display: none; }
+
+  .check-all-btn {
+    font-family: 'Fredoka One', cursive;
+    display: block;
+    margin: 24px auto;
+    padding: 16px 48px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--orange), var(--pink));
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(249,115,22,0.4);
+  }
+
+  .check-all-btn:hover { transform: scale(1.05); }
+
+  /* ===================== DRAG & DROP ===================== */
+  .drag-container { max-width: 700px; margin: 0 auto; }
+
+  .drag-instruction {
+    text-align: center;
+    color: #A5B4FC;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1rem;
+  }
+
+  .drag-words-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 20px;
+    background: var(--card);
+    border-radius: 16px;
+    min-height: 80px;
+    margin-bottom: 24px;
+    border: 2px dashed rgba(255,255,255,0.2);
+  }
+
+  .drag-word {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border-radius: 50px;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    border: 2px solid transparent;
+  }
+
+  .drag-word:hover { transform: scale(1.05) rotate(-2deg); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+  .drag-word.dragging { opacity: 0.5; cursor: grabbing; }
+  .drag-word.placed { background: linear-gradient(135deg, var(--green), #059669); }
+
+  .drag-sentences { display: flex; flex-direction: column; gap: 14px; }
+
+  .drag-sentence-row {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px 22px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #E2E8F0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border: 2px solid var(--card2);
+    line-height: 2;
+  }
+
+  .drop-zone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    height: 38px;
+    background: rgba(255,255,255,0.06);
+    border: 2px dashed rgba(165,180,252,0.5);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    color: #6B7280;
+    transition: all 0.2s;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .drop-zone.drag-over { background: rgba(124,58,237,0.2); border-color: var(--purple); transform: scale(1.03); }
+  .drop-zone.filled { background: rgba(16,185,129,0.15); border-color: var(--green); color: #6EE7B7; font-weight: 800; }
+  .drop-zone.wrong-zone { background: rgba(239,68,68,0.15); border-color: var(--red); color: #FCA5A5; }
+
+  .drag-result { text-align: center; margin-top: 20px; display: none; }
+  .drag-result.show { display: block; }
+
+  /* ===================== MEMORY ===================== */
+  .memory-container { max-width: 700px; margin: 0 auto; text-align: center; }
+
+  .memory-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #A5B4FC;
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 0 auto 20px;
+    max-width: 600px;
+  }
+
+  .memory-card {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    cursor: pointer;
+    perspective: 600px;
+    position: relative;
+  }
+
+  .memory-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 14px;
+  }
+
+  .memory-card.flipped .memory-card-inner { transform: rotateY(180deg); }
+  .memory-card.matched .memory-card-inner { transform: rotateY(180deg); }
+  .memory-card.matched .memory-card-front { border-color: var(--green); box-shadow: 0 0 20px rgba(16,185,129,0.5); }
+
+  .memory-card-back, .memory-card-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    border: 2px solid;
+  }
+
+  .memory-card-back {
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border-color: rgba(255,255,255,0.2);
+    font-size: 2rem;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .memory-card-front {
+    background: var(--card);
+    transform: rotateY(180deg);
+    border-color: var(--card2);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 8px;
+    line-height: 1.3;
+    color: #E2E8F0;
+  }
+
+  .memory-card-front.verb-base { color: #FCD34D; font-size: 1rem; }
+  .memory-card-front.verb-past { color: #6EE7B7; font-size: 1rem; }
+
+  .memory-start-btn {
+    font-family: 'Fredoka One', cursive;
+    padding: 16px 48px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(16,185,129,0.4);
+    margin: 10px;
+  }
+
+  .memory-start-btn:hover { transform: scale(1.05); }
+
+  /* RESULT PANEL */
+  .result-panel {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 36px;
+    text-align: center;
+    display: none;
+    border: 2px solid var(--card2);
+    animation: fadeIn 0.5s ease;
+  }
+
+  .result-panel.show { display: block; }
+  .result-panel h2 { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--yellow); margin-bottom: 12px; }
+  .result-panel p { color: #A5B4FC; font-size: 1.1rem; margin-bottom: 20px; }
+
+  .stars { font-size: 2.5rem; margin: 14px 0; }
+
+  .restart-btn {
+    font-family: 'Fredoka One', cursive;
+    padding: 14px 40px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 6px;
+  }
+
+  .restart-btn:hover { transform: scale(1.05); }
+
+  /* FLOATING CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 500px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .memory-card-front { font-size: 0.7rem; }
+    .tabs { gap: 6px; }
+    .tab-btn { padding: 10px 14px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="rocket">🚀</div>
+  <h1>Past Simple Adventure</h1>
+  <p>Master the Past Simple tense — one mission at a time!</p>
+</header>
+
+<div class="container">
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div class="score-item"><span>⭐</span><span id="totalScore">0 pts</span></div>
+    <div class="score-item"><span>🏆</span><span id="level">Explorer</span></div>
+    <div class="score-item"><span>🔥</span><span id="streak">Streak: 0</span></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('lesson', this)">📖 Lesson</button>
+    <button class="tab-btn" onclick="switchTab('quiz', this)">🧠 Quiz</button>
+    <button class="tab-btn" onclick="switchTab('fill', this)">✏️ Fill in</button>
+    <button class="tab-btn" onclick="switchTab('drag', this)">🎯 Drag & Drop</button>
+    <button class="tab-btn" onclick="switchTab('memory', this)">🃏 Memory</button>
+  </div>
+
+  <!-- =================== LESSON =================== -->
+  <div id="lesson" class="section active">
+
+    <div class="lesson-card purple" data-emoji="📅">
+      <h2>📅 What is the Past Simple?</h2>
+      <p>We use the Past Simple to talk about <strong>completed actions</strong> in the past — actions that are <strong>finished</strong> and happened at a specific time.</p>
+      <div class="formula-box">
+        Subject + Verb (past form) + rest of sentence
+      </div>
+      <div class="examples-grid">
+        <div class="example-chip">I <strong>played</strong> football yesterday.</div>
+        <div class="example-chip">She <strong>ate</strong> a pizza last night.</div>
+        <div class="example-chip">They <strong>went</strong> to the cinema.</div>
+        <div class="example-chip">He <strong>studied</strong> for the test.</div>
+      </div>
+    </div>
+
+    <div class="lesson-card pink" data-emoji="✅">
+      <h2>✅ Regular Verbs: add -ED</h2>
+      <p>For most verbs, just add <strong>-ed</strong> to the base form. Some spelling rules apply!</p>
+      <div class="formula-box">
+        play → play<strong>ed</strong> &nbsp;|&nbsp; watch → watch<strong>ed</strong> &nbsp;|&nbsp; study → studi<strong>ed</strong>
+      </div>
+      <div class="examples-grid">
+        <div class="example-chip">walk → <strong>walked</strong></div>
+        <div class="example-chip">jump → <strong>jumped</strong></div>
+        <div class="example-chip">stop → <strong>stopped</strong> (double p!)</div>
+        <div class="example-chip">love → <strong>loved</strong> (just +d)</div>
+        <div class="example-chip">try → <strong>tried</strong> (y → ied)</div>
+        <div class="example-chip">dance → <strong>danced</strong></div>
+      </div>
+    </div>
+
+    <div class="lesson-card blue" data-emoji="⚡">
+      <h2>⚡ Irregular Verbs — No Rules!</h2>
+      <p>These verbs are <strong>rebels</strong> — they don't follow the -ed rule. You have to learn them by heart! 💪</p>
+      <table class="irregular-table">
+        <tr><th>Base form</th><th>Past Simple</th><th>Example</th></tr>
+        <tr><td>go</td><td><strong>went</strong></td><td>I went to school.</td></tr>
+        <tr><td>eat</td><td><strong>ate</strong></td><td>She ate cake.</td></tr>
+        <tr><td>have</td><td><strong>had</strong></td><td>We had fun.</td></tr>
+        <tr><td>see</td><td><strong>saw</strong></td><td>He saw a film.</td></tr>
+        <tr><td>buy</td><td><strong>bought</strong></td><td>They bought tickets.</td></tr>
+        <tr><td>run</td><td><strong>ran</strong></td><td>She ran fast.</td></tr>
+        <tr><td>come</td><td><strong>came</strong></td><td>He came home.</td></tr>
+        <tr><td>take</td><td><strong>took</strong></td><td>I took a photo.</td></tr>
+        <tr><td>make</td><td><strong>made</strong></td><td>We made a cake.</td></tr>
+        <tr><td>get</td><td><strong>got</strong></td><td>She got a gift.</td></tr>
+      </table>
+    </div>
+
+    <div class="lesson-card green" data-emoji="❓">
+      <h2>❓ Negatives & Questions with DID</h2>
+      <p>For negatives and questions in the Past Simple, we use the auxiliary verb <strong>DID / DIDN'T</strong>. The main verb returns to its <strong>base form</strong>!</p>
+      <div class="formula-box">
+        ❌ She <strong>didn't go</strong> to school. (NOT didn't went)<br>
+        ❓ <strong>Did</strong> he eat? — Yes, he did. / No, he didn't.
+      </div>
+      <div class="examples-grid">
+        <div class="example-chip">I <strong>didn't</strong> watch TV.</div>
+        <div class="example-chip"><strong>Did</strong> you like it?</div>
+        <div class="example-chip">They <strong>didn't</strong> play.</div>
+        <div class="example-chip"><strong>Did</strong> she run?</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =================== QUIZ =================== -->
+  <div id="quiz" class="section">
+    <div class="quiz-container">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="quizProgress" style="width:0%"></div>
+      </div>
+      <div class="question-card" id="questionCard">
+        <div class="question-number" id="questionNum">Question 1 / 10</div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback-box" id="feedbackBox"></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next ➡️</button>
+      </div>
+      <div class="result-panel" id="quizResult">
+        <div class="stars" id="quizStars"></div>
+        <h2 id="quizResultTitle"></h2>
+        <p id="quizResultMsg"></p>
+        <button class="restart-btn" onclick="startQuiz()">🔄 Play Again</button>
+        <button class="restart-btn" onclick="switchTab('lesson', document.querySelector('.tab-btn'))">📖 Review Lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== FILL IN =================== -->
+  <div id="fill" class="section">
+    <div class="blank-container">
+      <p style="text-align:center; color:#A5B4FC; font-weight:600; margin-bottom:20px;">
+        📝 Complete the sentences with the correct past form of the verb in brackets.
+      </p>
+      <div id="blankExercises"></div>
+      <button class="check-all-btn" onclick="checkAllBlanks()">✅ Check my answers!</button>
+      <div class="result-panel" id="fillResult">
+        <div class="stars" id="fillStars"></div>
+        <h2 id="fillResultTitle"></h2>
+        <p id="fillResultMsg"></p>
+        <button class="restart-btn" onclick="resetFill()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== DRAG & DROP =================== -->
+  <div id="drag" class="section">
+    <div class="drag-container">
+      <p class="drag-instruction">🎯 Drag the correct past simple verb into each sentence!</p>
+      <div class="drag-words-pool" id="wordPool"></div>
+      <div class="drag-sentences" id="dragSentences"></div>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="check-all-btn" onclick="checkDrag()">✅ Check answers</button>
+      </div>
+      <div class="drag-result" id="dragResult">
+        <div class="result-panel show" id="dragResultPanel">
+          <div class="stars" id="dragStars"></div>
+          <h2 id="dragResultTitle"></h2>
+          <p id="dragResultMsg"></p>
+          <button class="restart-btn" onclick="initDrag()">🔄 Play Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== MEMORY =================== -->
+  <div id="memory" class="section">
+    <div class="memory-container">
+      <div class="memory-info">
+        <span>⏱️ <span id="memTimer">0:00</span></span>
+        <span>🃏 Pairs: <span id="memPairs">0/8</span></span>
+        <span>💫 Moves: <span id="memMoves">0</span></span>
+      </div>
+      <div class="memory-grid" id="memoryGrid"></div>
+      <div id="memoryStart">
+        <p style="color:#A5B4FC; font-weight:600; margin-bottom:16px;">Match each base verb with its Past Simple form!</p>
+        <button class="memory-start-btn" onclick="startMemory()">🃏 Start Game!</button>
+      </div>
+      <div class="result-panel" id="memoryResult">
+        <div class="stars" id="memStars"></div>
+        <h2>Mission Complete! 🎉</h2>
+        <p id="memResultMsg"></p>
+        <button class="restart-btn" onclick="startMemory()">🔄 Play Again</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===================== STATE =====================
+let totalScore = 0;
+let streak = 0;
+const levels = [
+  [0, 'Explorer 🌱'],
+  [50, 'Learner 📚'],
+  [120, 'Scholar 🔬'],
+  [250, 'Master ⚡'],
+  [400, 'Champion 🏆'],
+];
+
+function addScore(pts) {
+  totalScore += pts;
+  streak++;
+  updateScoreUI();
+  if (pts > 0) launchConfetti();
+}
+
+function resetStreak() { streak = 0; updateScoreUI(); }
+
+function updateScoreUI() {
+  document.getElementById('totalScore').textContent = totalScore + ' pts';
+  document.getElementById('streak').textContent = 'Streak: ' + streak;
+  let lv = levels[0][1];
+  for (let [t, n] of levels) { if (totalScore >= t) lv = n; }
+  document.getElementById('level').textContent = lv;
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'quiz' && !quizStarted) startQuiz();
+  if (id === 'fill') buildFillExercises();
+  if (id === 'drag') initDrag();
+  if (id === 'memory' && !memoryRunning) { /* wait for button */ }
+}
+
+// ===================== CONFETTI =====================
+function launchConfetti() {
+  const colors = ['#FBBF24','#EC4899','#7C3AED','#10B981','#3B82F6','#F97316'];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random()*100}vw;
+      top: -20px;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration: ${0.8 + Math.random()*1.2}s;
+      animation-delay: ${Math.random()*0.4}s;
+      width: ${6+Math.random()*8}px;
+      height: ${6+Math.random()*8}px;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+}
+
+// ===================== QUIZ =====================
+const quizQuestions = [
+  { q: "Yesterday, she ___ (go) to the supermarket.", blank: true, answer: "went", options: ["went", "go", "goed", "goes"] },
+  { q: "We ___ (watch) a great film last night.", blank: true, answer: "watched", options: ["watched", "watch", "watche", "wached"] },
+  { q: "Tom ___ (not eat) his vegetables.", blank: true, answer: "didn't eat", options: ["didn't eat", "not ate", "didn't ate", "doesn't eat"] },
+  { q: "Which sentence is correct?", blank: false, answer: "She ran to school.", options: ["She ran to school.", "She runned to school.", "She runs to school.", "She did run to school."] },
+  { q: "___ you (see) the new film?", blank: true, answer: "Did ... see", options: ["Did ... see", "Do ... see", "Did ... saw", "Were ... see"] },
+  { q: "They ___ (buy) new trainers.", blank: true, answer: "bought", options: ["bought", "buyed", "buy", "boughts"] },
+  { q: "I ___ (study) French last year.", blank: true, answer: "studied", options: ["studied", "studyed", "study", "studed"] },
+  { q: "Which sentence uses the Past Simple correctly?", blank: false, answer: "He didn't come to the party.", options: ["He didn't came to the party.", "He didn't come to the party.", "He not came to the party.", "He doesn't came to the party."] },
+  { q: "My mum ___ (make) a delicious cake.", blank: true, answer: "made", options: ["made", "maked", "make", "makes"] },
+  { q: "We ___ (have) a barbecue on Saturday.", blank: true, answer: "had", options: ["had", "haved", "have", "has"] },
+];
+
+let quizIndex = 0;
+let quizScore = 0;
+let quizStarted = false;
+let answered = false;
+
+function startQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  quizStarted = true;
+  answered = false;
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('questionCard').style.display = 'block';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if (quizIndex >= quizQuestions.length) { endQuiz(); return; }
+  answered = false;
+  const q = quizQuestions[quizIndex];
+  document.getElementById('questionNum').textContent = `Question ${quizIndex+1} / ${quizQuestions.length}`;
+  document.getElementById('quizProgress').style.width = (quizIndex / quizQuestions.length * 100) + '%';
+  const qText = document.getElementById('questionText');
+  qText.innerHTML = q.q.replace('___', '<span class="blank">___</span>');
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const shuffled = [...q.options].sort(() => Math.random()-0.5);
+  shuffled.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(opt, q.answer, btn);
+    grid.appendChild(btn);
+  });
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('feedbackBox').textContent = '';
+  document.getElementById('nextBtn').classList.remove('show');
+}
+
+function selectAnswer(chosen, correct, btn) {
+  if (answered) return;
+  answered = true;
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  const fb = document.getElementById('feedbackBox');
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.className = 'feedback-box good show';
+    fb.textContent = ['🎉 Correct! Well done!', '⭐ Brilliant!', '🚀 Spot on!', '💪 Perfect!'][Math.floor(Math.random()*4)];
+    quizScore++;
+    addScore(10);
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'feedback-box bad show';
+    fb.textContent = `❌ Not quite. The answer is: "${correct}"`;
+    resetStreak();
+  }
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQuestion() {
+  quizIndex++;
+  loadQuestion();
+}
+
+function endQuiz() {
+  document.getElementById('questionCard').style.display = 'none';
+  const result = document.getElementById('quizResult');
+  result.classList.add('show');
+  const pct = quizScore / quizQuestions.length;
+  let stars = pct >= 0.9 ? '⭐⭐⭐' : pct >= 0.6 ? '⭐⭐' : '⭐';
+  let title = pct >= 0.9 ? 'Incredible! 🏆' : pct >= 0.6 ? 'Great job! 🎉' : 'Keep going! 💪';
+  let msg = `You scored ${quizScore} out of ${quizQuestions.length}. `;
+  if (pct >= 0.9) msg += "You're a Past Simple master!";
+  else if (pct >= 0.6) msg += "Well done! Review the lesson to improve.";
+  else msg += "Don't give up — review the lesson and try again!";
+  document.getElementById('quizStars').textContent = stars;
+  document.getElementById('quizResultTitle').textContent = title;
+  document.getElementById('quizResultMsg').textContent = msg;
+}
+
+// ===================== FILL IN THE BLANK =====================
+const blankData = [
+  { before: "Last weekend, I ", verb: "play", after: " tennis with my friend.", answer: "played", hint: "regular verb" },
+  { before: "She ", verb: "go", after: " to Paris last summer.", answer: "went", hint: "irregular!" },
+  { before: "They ", verb: "not / watch", after: " TV yesterday evening.", answer: "didn't watch", hint: "use didn't" },
+  { before: "My dad ", verb: "make", after: " pancakes for breakfast.", answer: "made", hint: "irregular!" },
+  { before: "", verb: "Did", after: " you enjoy the concert? (Yes / No answer needed)", answer: "Did", hint: "question form" },
+  { before: "We ", verb: "run", after: " in the park on Saturday.", answer: "ran", hint: "irregular!" },
+  { before: "The cat ", verb: "not / eat", after: " its food.", answer: "didn't eat", hint: "use didn't" },
+  { before: "He ", verb: "take", after: " lots of photos during the trip.", answer: "took", hint: "irregular!" },
+];
+
+function buildFillExercises() {
+  const container = document.getElementById('blankExercises');
+  container.innerHTML = '';
+  document.getElementById('fillResult').classList.remove('show');
+  blankData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'blank-card';
+    div.id = `blankCard${i}`;
+    div.innerHTML = `
+      <div class="blank-sentence">
+        ${item.before}
+        <input class="blank-input" id="blankInput${i}" placeholder="?" type="text" autocomplete="off">
+        ${item.after}
+      </div>
+      <div class="hint-text">Verb: <strong>(${item.verb})</strong> — ${item.hint}</div>
+      <div class="correct-answer" id="blankAnswer${i}">✅ Answer: ${item.answer}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkAllBlanks() {
+  let correct = 0;
+  blankData.forEach((item, i) => {
+    const input = document.getElementById(`blankInput${i}`);
+    const card = document.getElementById(`blankCard${i}`);
+    const answerDiv = document.getElementById(`blankAnswer${i}`);
+    const val = input.value.trim().toLowerCase();
+    const expected = item.answer.toLowerCase();
+    input.disabled = true;
+    if (val === expected) {
+      input.classList.add('correct-input');
+      card.classList.add('correct-card');
+      correct++;
+    } else {
+      input.classList.add('wrong-input');
+      card.classList.add('wrong-card');
+      answerDiv.style.display = 'block';
+    }
+  });
+  const pct = correct / blankData.length;
+  let stars = pct >= 0.875 ? '⭐⭐⭐' : pct >= 0.5 ? '⭐⭐' : '⭐';
+  document.getElementById('fillStars').textContent = stars;
+  document.getElementById('fillResultTitle').textContent = pct >= 0.875 ? 'Perfect! 🎊' : pct >= 0.5 ? 'Good work! 👍' : 'Keep practising! 💪';
+  document.getElementById('fillResultMsg').textContent = `${correct} / ${blankData.length} correct!`;
+  document.getElementById('fillResult').classList.add('show');
+  addScore(correct * 8);
+  if (correct < blankData.length) resetStreak();
+}
+
+function resetFill() {
+  buildFillExercises();
+}
+
+// ===================== DRAG & DROP =====================
+const dragData = [
+  { before: "Last night, I", answer: "ate", after: "pizza for dinner." },
+  { before: "She", answer: "studied", after: "very hard for the exam." },
+  { before: "They", answer: "went", after: "to the beach last summer." },
+  { before: "He", answer: "bought", after: "a new bike yesterday." },
+  { before: "We", answer: "played", after: "football in the park." },
+  { before: "My cat", answer: "ran", after: "into the garden." },
+];
+
+let dragAnswers = {};
+let selectedWord = null;
+
+function initDrag() {
+  dragAnswers = {};
+  selectedWord = null;
+  document.getElementById('dragResult').style.display = 'none';
+
+  const pool = document.getElementById('wordPool');
+  pool.innerHTML = '';
+  const words = dragData.map(d => d.answer);
+  const extras = ['walked', 'saw', 'had', 'took'];
+  const allWords = [...words, ...extras].sort(() => Math.random()-0.5);
+
+  allWords.forEach(w => {
+    const el = document.createElement('div');
+    el.className = 'drag-word';
+    el.textContent = w;
+    el.draggable = true;
+    el.dataset.word = w;
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', w);
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+    el.addEventListener('click', () => handleWordClick(w, el));
+    pool.appendChild(el);
+  });
+
+  const sentences = document.getElementById('dragSentences');
+  sentences.innerHTML = '';
+  dragData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'drag-sentence-row';
+    row.innerHTML = `
+      <span>${item.before}</span>
+      <span class="drop-zone" id="dropZone${i}" data-index="${i}" ondragover="e => e.preventDefault()" ondrop="handleDrop(event, ${i})">
+        drop here
+      </span>
+      <span>${item.after}</span>
+    `;
+    sentences.appendChild(row);
+    const dz = row.querySelector('.drop-zone');
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => handleDrop(e, i));
+    dz.addEventListener('click', () => handleZoneClick(i));
+  });
+}
+
+function handleWordClick(word, el) {
+  if (selectedWord === word) {
+    selectedWord = null;
+    el.style.outline = '';
+  } else {
+    document.querySelectorAll('.drag-word').forEach(d => d.style.outline = '');
+    selectedWord = word;
+    el.style.outline = '3px solid ' + 'var(--yellow)';
+  }
+}
+
+function handleZoneClick(idx) {
+  if (!selectedWord) return;
+  placeWordInZone(selectedWord, idx);
+  selectedWord = null;
+  document.querySelectorAll('.drag-word').forEach(d => d.style.outline = '');
+}
+
+function handleDrop(e, idx) {
+  e.preventDefault();
+  const word = e.dataTransfer.getData('text/plain');
+  placeWordInZone(word, idx);
+}
+
+function placeWordInZone(word, idx) {
+  const zone = document.getElementById(`dropZone${idx}`);
+  zone.classList.remove('drag-over');
+  // Return old word if any
+  if (dragAnswers[idx]) {
+    const old = dragAnswers[idx];
+    document.querySelectorAll('.drag-word').forEach(d => { if (d.dataset.word === old) d.style.display = ''; });
+  }
+  dragAnswers[idx] = word;
+  zone.textContent = word;
+  zone.classList.add('filled');
+  zone.classList.remove('wrong-zone');
+  // Hide word from pool
+  document.querySelectorAll('.drag-word').forEach(d => { if (d.dataset.word === word) d.style.display = 'none'; });
+}
+
+function checkDrag() {
+  let correct = 0;
+  dragData.forEach((item, i) => {
+    const zone = document.getElementById(`dropZone${i}`);
+    if (dragAnswers[i] === item.answer) {
+      zone.classList.add('filled');
+      zone.classList.remove('wrong-zone');
+      correct++;
+    } else {
+      zone.classList.add('wrong-zone');
+      zone.classList.remove('filled');
+      zone.textContent = dragAnswers[i] || '?';
+    }
+  });
+  const pct = correct / dragData.length;
+  document.getElementById('dragStars').textContent = pct >= 0.9 ? '⭐⭐⭐' : pct >= 0.6 ? '⭐⭐' : '⭐';
+  document.getElementById('dragResultTitle').textContent = pct === 1 ? 'All correct! 🎊' : `${correct}/${dragData.length} correct!`;
+  document.getElementById('dragResultMsg').textContent = pct >= 0.9 ? 'Absolutely brilliant!' : pct >= 0.6 ? 'Nice work! Try again to get them all.' : 'Keep it up — review the lesson!';
+  document.getElementById('dragResult').style.display = 'block';
+  addScore(correct * 12);
+}
+
+// ===================== MEMORY =====================
+const memPairs = [
+  { base: 'go', past: 'went' },
+  { base: 'eat', past: 'ate' },
+  { base: 'see', past: 'saw' },
+  { base: 'buy', past: 'bought' },
+  { base: 'run', past: 'ran' },
+  { base: 'come', past: 'came' },
+  { base: 'make', past: 'made' },
+  { base: 'take', past: 'took' },
+];
+
+let memoryRunning = false;
+let memFlipped = [];
+let memMatched = 0;
+let memMoves = 0;
+let memInterval = null;
+let memSeconds = 0;
+let memLocked = false;
+
+function startMemory() {
+  memMatched = 0;
+  memMoves = 0;
+  memSeconds = 0;
+  memLocked = false;
+  memFlipped = [];
+  memoryRunning = true;
+  document.getElementById('memoryResult').classList.remove('show');
+  document.getElementById('memoryStart').style.display = 'none';
+  clearInterval(memInterval);
+  memInterval = setInterval(() => {
+    memSeconds++;
+    const m = Math.floor(memSeconds/60);
+    const s = memSeconds%60;
+    document.getElementById('memTimer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+  document.getElementById('memMoves').textContent = '0';
+  document.getElementById('memPairs').textContent = '0/8';
+
+  const cards = [];
+  memPairs.forEach(pair => {
+    cards.push({ id: pair.base + '_base', pairId: pair.base, text: pair.base, type: 'verb-base' });
+    cards.push({ id: pair.past + '_past', pairId: pair.base, text: pair.past, type: 'verb-past' });
+  });
+  cards.sort(() => Math.random()-0.5);
+
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML = '';
+  cards.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'memory-card';
+    el.dataset.pairId = card.pairId;
+    el.dataset.cardId = card.id;
+    el.innerHTML = `
+      <div class="memory-card-inner">
+        <div class="memory-card-back">?</div>
+        <div class="memory-card-front ${card.type}">${card.text}</div>
+      </div>
+    `;
+    el.addEventListener('click', () => flipMemCard(el));
+    grid.appendChild(el);
+  });
+}
+
+function flipMemCard(el) {
+  if (memLocked) return;
+  if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
+  el.classList.add('flipped');
+  memFlipped.push(el);
+  if (memFlipped.length === 2) {
+    memMoves++;
+    document.getElementById('memMoves').textContent = memMoves;
+    memLocked = true;
+    const [a, b] = memFlipped;
+    if (a.dataset.pairId === b.dataset.pairId && a.dataset.cardId !== b.dataset.cardId) {
+      a.classList.add('matched');
+      b.classList.add('matched');
+      memMatched++;
+      document.getElementById('memPairs').textContent = memMatched + '/8';
+      memFlipped = [];
+      memLocked = false;
+      addScore(15);
+      if (memMatched === 8) endMemory();
+    } else {
+      resetStreak();
+      setTimeout(() => {
+        a.classList.remove('flipped');
+        b.classList.remove('flipped');
+        memFlipped = [];
+        memLocked = false;
+      }, 900);
+    }
+  }
+}
+
+function endMemory() {
+  clearInterval(memInterval);
+  memoryRunning = false;
+  const m = Math.floor(memSeconds/60);
+  const s = memSeconds%60;
+  const timeStr = `${m}:${s.toString().padStart(2,'0')}`;
+  let stars = memMoves <= 12 ? '⭐⭐⭐' : memMoves <= 18 ? '⭐⭐' : '⭐';
+  document.getElementById('memStars').textContent = stars;
+  document.getElementById('memResultMsg').textContent = `Time: ${timeStr} | Moves: ${memMoves}. ${memMoves <= 12 ? 'Incredible memory!' : 'Good game! Can you beat your score?'}`;
+  document.getElementById('memoryResult').classList.add('show');
+  launchConfetti();
+}
+
+// Init
+buildFillExercises();
+startQuiz();
+</script>
+</body>
+</html>
